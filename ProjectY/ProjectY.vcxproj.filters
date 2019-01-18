@@ -13,16 +13,25 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="wavfile">
+      <UniqueIdentifier>{3cf15935-cece-4b76-8064-a7176cfd467e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="mThreeBandFilter.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="my_sparse_fir_fliter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dr_wav.h">
+      <Filter>wavfile</Filter>
+    </ClInclude>
+    <ClInclude Include="wavfile.h">
+      <Filter>wavfile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ProjectY.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
