@@ -21,7 +21,7 @@ typedef struct ThreeBandFilter
 	float* out_buffer_;
 
 	float dct_modulation_[kSparsity*kNumBands][kNumBands];	// [kNumBands]
-	mSparseFIRFilter *pAnalysis[kNumBands * kSparsity];		// 指针数组 
+	mSparseFIRFilter *pAnalysis[kNumBands * kSparsity];		
 	mSparseFIRFilter *pSynthesis[kNumBands * kSparsity];
 };
 
@@ -62,79 +62,16 @@ const float kLowpassCoeffs[kNumBands * kSparsity][kNumCoeffs] = {
 { +0.00994113f, +0.14989004f, -0.01585778f, -0.00173287f },
 { +0.00425496f, +0.16547118f, -0.00496888f, -0.00047749f } };
 
-// Modulates |in| by |dct_modulation_| and accumulates it in each of the
-// |kNumBands| bands of |out|. |offset| is the index in the period of the
-// cosines used for modulation. |split_length| is the length of |in| and each
-// band of |out|.
+int ThreeBandFilter_Init(ThreeBandFilter *handles, size_t length) {
 
-void ThreeBandFilter_DownModulate(
-	ThreeBandFilter *handles,
-	const float* in,
-	size_t split_length,
-	size_t offset,
-	float* const* out) {
-	for (size_t i = 0; i < kNumBands; ++i) {
-		for (size_t j = 0; j < split_length; ++j) {
-			//out[i][j] += dct_modulation_[offset][i] * in[j];
-			out[i][j] += handles->dct_modulation_[offset][i] * in[j];
-		}
-	}
-}
-
-// Modulates each of the |kNumBands| bands of |in| by |dct_modulation_| and
-// accumulates them in |out|. |out| is cleared before starting to accumulate.
-// |offset| is the index in the period of the cosines used for modulation.
-// |split_length| is the length of each band of |in| and |out|.
-void ThreeBandFilter_UpModulate(
-	ThreeBandFilter *handles,
-	const float* const* in,
-	size_t split_length,
-	size_t offset,
-	float* out) {
-	memset(out, 0, split_length * sizeof(*out));
-	for (size_t i = 0; i < kNumBands; ++i) {
-		for (size_t j = 0; j < split_length; ++j) {
-			//out[j] += dct_modulation_[offset][i] * in[i][j];
-			out[j] += handles->dct_modulation_[offset][i] * in[i][j];
-		}
-	}
-}
-
-
-
-int ThreeBandFilter_Init(ThreeBandFilter *handles, unsigned int length) {
-
-	//handles = (ThreeBandFilter*)malloc(sizeof(ThreeBandFilter));
-	handles->buffer_len_ = length / kNumBands ;
-
-	handles->in_buffer_ = (float *)malloc(sizeof(float) * handles->buffer_len_); //  (length / kNumBands),
-	handles->out_buffer_ = (float*)malloc( sizeof(float)*handles->buffer_len_);//out_buffer_(in_buffer_.size());
-
-	//handles->pAnalysis = (mSparseFIRFilter*);
-
-	//printf("pAnalysis %d \n", sizeof(handles->pAnalysis));
-	//printf("Sprasity %d \n", sizeof(mSparseFIRFilter));
-
-	//for (size_t i = 0; i < 12; i++)
-	//{
-	//	handles->pAnalysis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter));
-	//	handles->pSynthesis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter));
-	//}
+	handles->buffer_len_ = length / kNumBands ;										// 480 / 3 = 160
+	handles->in_buffer_ = (float *)malloc(sizeof(float) * handles->buffer_len_);	
+	handles->out_buffer_ = (float*)malloc( sizeof(float)*handles->buffer_len_);		
 
 	// sparsity FIR LPF init
 	for (size_t i = 0; i < kSparsity; ++i) {
 		for (size_t j = 0; j < kNumBands; ++j) {
-			//analysis_filters_.push_back(
-			//	std::unique_ptr<mSparseFIRFilter>(new mSparseFIRFilter(
-			//		kLowpassCoeffs[i * kNumBands + j], kNumCoeffs, kSparsity, i)));
-			//synthesis_filters_.push_back(
-			//	std::unique_ptr<mSparseFIRFilter>(new mSparseFIRFilter(
-			//		kLowpassCoeffs[i * kNumBands + j], kNumCoeffs, kSparsity, i)));
-
-			//handles->pAnalysis[i * kNumBands + j] = (mSparseFIRFilter*)malloc(sizeof(mSparseFIRFilter));
 			SparseFIRFilter_Init(handles->pAnalysis[i * kNumBands + j], kLowpassCoeffs[i * kNumBands + j], kNumCoeffs, kSparsity, i );
-
-			//handles->pSynthesis[i * kNumBands + j] = (mSparseFIRFilter*)malloc(sizeof(mSparseFIRFilter));
 			SparseFIRFilter_Init(handles->pSynthesis[i * kNumBands + j], kLowpassCoeffs[i * kNumBands + j], kNumCoeffs, kSparsity, i);
 		}
 	}
@@ -144,10 +81,7 @@ int ThreeBandFilter_Init(ThreeBandFilter *handles, unsigned int length) {
 		for (size_t j = 0; j < kNumBands; ++j) {
 			handles->dct_modulation_[i][j] =
 				2.f * cos(2.f * M_PI * i * (2.f * j + 1.f) / (float)(kSparsity*kNumBands));
-			//printf("%d - %d %f \n",i,j,handles->dct_modulation_[i][j]);
-			printf("%f ",handles->dct_modulation_[i][j]);
 		}
-		printf("\n");
 	}
 	return 0;
 }
@@ -155,13 +89,16 @@ ThreeBandFilter* ThreeBandFilter_Create(size_t length) {
 
 	// create and malloc memory
 	ThreeBandFilter *handles = (ThreeBandFilter*)malloc(sizeof(ThreeBandFilter));
-
-	for (size_t i = 0; i < kSparsity*kNumBands; i++)
+	if (handles != NULL)
 	{
-		handles->pAnalysis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter) );
-		handles->pSynthesis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter) );
+		for (size_t i = 0; i < kSparsity*kNumBands; i++)
+		{
+			handles->pAnalysis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter));
+			handles->pSynthesis[i] = (mSparseFIRFilter *)malloc(sizeof(mSparseFIRFilter));
+		}
+		ThreeBandFilter_Init(handles, length);
 	}
-	ThreeBandFilter_Init(handles, length);
+
 	return handles;
 }
 // Downsamples |in| into |out|, taking one every |kNumbands| starting from
@@ -184,28 +121,59 @@ void mUpsample(const float* in, size_t split_length, size_t offset, float* out) 
 		out[kNumBands * i + offset] += kNumBands * in[i];
 	}
 }
+// Modulates |in| by |dct_modulation_| and accumulates it in each of the
+// |kNumBands| bands of |out|. |offset| is the index in the period of the
+// cosines used for modulation. |split_length| is the length of |in| and each
+// band of |out|.
+
+void ThreeBandFilter_DownModulate(
+	ThreeBandFilter *handles,
+	const float* in,
+	size_t split_length,
+	size_t offset,
+	float* const* out) {
+	for (size_t i = 0; i < kNumBands; ++i) {
+		for (size_t j = 0; j < split_length; ++j) {
+			out[i][j] += handles->dct_modulation_[offset][i] * in[j];
+		}
+	}
+}
+
+// Modulates each of the |kNumBands| bands of |in| by |dct_modulation_| and
+// accumulates them in |out|. |out| is cleared before starting to accumulate.
+// |offset| is the index in the period of the cosines used for modulation.
+// |split_length| is the length of each band of |in| and |out|.
+void ThreeBandFilter_UpModulate(
+	ThreeBandFilter *handles,
+	const float* const* in,
+	size_t split_length,
+	size_t offset,
+	float* out) {
+	memset(out, 0, split_length * sizeof(*out));
+	for (size_t i = 0; i < kNumBands; ++i) {
+		for (size_t j = 0; j < split_length; ++j) {
+			out[j] += handles->dct_modulation_[offset][i] * in[i][j];
+		}
+	}
+}
+
 
 void ThreeBandFilter_Analysis(ThreeBandFilter *handles,const float* in,
 	size_t length,
 	float* const* out) {
 	//RTC_CHECK_EQ(in_buffer_.size(), rtc::CheckedDivExact(length, kNumBands));
 	for (size_t i = 0; i < kNumBands; ++i) {
-		//memset(out[i], 0, in_buffer_.size() * sizeof(*out[i]));
 		memset(out[i], 0, handles->buffer_len_ * sizeof(*out[i]));
 	}
 	for (size_t i = 0; i < kNumBands; ++i) {
-		//mDownsample(in, in_buffer_.size(), kNumBands - i - 1, &in_buffer_[0]);
 		mDownsample(in, handles->buffer_len_, kNumBands - i - 1, handles->in_buffer_);
 		for (size_t j = 0; j < kSparsity; ++j) {
 			const size_t offset = i + j * kNumBands;
-			//analysis_filters_[offset]->Filter(&in_buffer_[0], in_buffer_.size(),
-			//	&out_buffer_[0]);
 			SparseFIRFilter_Filter(
 				handles->pAnalysis[offset],
 				handles->in_buffer_, 
 				handles->buffer_len_,
 				handles->out_buffer_);
-			//DownModulate(&out_buffer_[0], out_buffer_.size(), offset, out);
 			ThreeBandFilter_DownModulate(handles,handles->out_buffer_, handles->buffer_len_, offset, out);
 		}
 	}
@@ -215,21 +183,16 @@ void ThreeBandFilter_Synthesis(ThreeBandFilter *handles, const float* const* in,
 	size_t split_length,
 	float* out) {
 	//RTC_CHECK_EQ(in_buffer_.size(), split_length);
-	//memset(out, 0, kNumBands * in_buffer_.size() * sizeof(*out));
 	memset(out, 0, kNumBands * handles->buffer_len_ * sizeof(*out));
 	for (size_t i = 0; i < kNumBands; ++i) {
 		for (size_t j = 0; j < kSparsity; ++j) {
 			const size_t offset = i + j * kNumBands;
-			//UpModulate(in, in_buffer_.size(), offset, &in_buffer_[0]);
 			ThreeBandFilter_UpModulate(handles,in, handles->buffer_len_, offset, handles->in_buffer_);
-			//synthesis_filters_[offset]->Filter(&in_buffer_[0], in_buffer_.size(),
-			//	&out_buffer_[0]);
 			SparseFIRFilter_Filter(
 				handles->pSynthesis[offset],
 				handles->in_buffer_,
 				handles->buffer_len_,
 				handles->out_buffer_);
-			//mUpsample(&out_buffer_[0], out_buffer_.size(), i, out);
 			mUpsample(handles->out_buffer_, handles->buffer_len_, i, out);
 		}
 	}
@@ -248,9 +211,6 @@ int ThreeBandFilter_Destory(ThreeBandFilter *handles){
 			SparseFIRFilter_Destory(handles->pAnalysis[i]);
 			SparseFIRFilter_Destory(handles->pSynthesis[i]);
 		}
-		//free(handles->pAnalysis);// 似乎不用
-		//free(handles->pAnalysis);
-
 		return 0;
 	}
 	return -1;

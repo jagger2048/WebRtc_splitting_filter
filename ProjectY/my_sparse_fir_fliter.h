@@ -1,4 +1,4 @@
-#pragma onceSparseFIRFilter
+#pragma once 
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
@@ -36,7 +36,7 @@ int  SparseFIRFilter_Init(
 
 	handles->state_len_ = handles->sparsity_ * (num_nonzero_coeffs - 1) + handles->offset_;
 	handles->state_ = (float *)malloc(sizeof(float)*(handles->state_len_));
-	memset(handles->state_, 0.0f, sizeof(float)*(handles->state_len_) );
+	memset(handles->state_, 0, sizeof(float)*(handles->state_len_) );
 
 
 	return 0;
