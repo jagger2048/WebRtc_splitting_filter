@@ -1,9 +1,9 @@
-#pragma once
+#pragma onceSparseFIRFilter
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
 
-typedef struct SparseFIRFilter
+typedef struct mSparseFIRFilter
 {
 	size_t sparsity_;
 	size_t offset_;
@@ -13,7 +13,8 @@ typedef struct SparseFIRFilter
 	float * state_;
 	size_t state_len_;
 };
-SparseFIRFilter * SparseFIRFilter_Init(
+int  SparseFIRFilter_Init(
+	mSparseFIRFilter * handles,
 	const float* nonzero_coeffs,
 	size_t num_nonzero_coeffs,
 	size_t sparsity,
@@ -23,7 +24,7 @@ SparseFIRFilter * SparseFIRFilter_Init(
 	{
 		return NULL;
 	}
-	SparseFIRFilter * handles = (SparseFIRFilter*)malloc(sizeof(SparseFIRFilter));
+	//mSparseFIRFilter * handles = (mSparseFIRFilter*)malloc(sizeof(mSparseFIRFilter));
 
 
 	handles->sparsity_ = sparsity;
@@ -38,9 +39,9 @@ SparseFIRFilter * SparseFIRFilter_Init(
 	memset(handles->state_, 0.0f, sizeof(float)*(handles->state_len_) );
 
 
-	return handles;
+	return 0;
 }
-void SparseFIRFilter_Filter(SparseFIRFilter *handles,const float* in, size_t length, float* out) {
+void SparseFIRFilter_Filter(mSparseFIRFilter *handles,const float* in, size_t length, float* out) {
 
 	for (size_t i = 0; i < length; ++i) {
 		out[i] = 0.f;
@@ -69,12 +70,26 @@ void SparseFIRFilter_Filter(SparseFIRFilter *handles,const float* in, size_t len
 	}
 }
 
-int SparseFIRFilter_Destory(SparseFIRFilter *handles) {
+int SparseFIRFilter_Destory(mSparseFIRFilter *handles) {
 
 	if (handles!=NULL)
 	{
-		free(handles->nonzero_coeffs_);
-		free(handles->state_);
+		if (handles->nonzero_coeffs_ !=NULL)
+		{
+			free(handles->nonzero_coeffs_);
+		}
+		else
+		{
+			return -1;
+		}
+		if (handles->state_ !=NULL)
+		{
+			free(handles->state_);
+		}
+		else
+		{
+			return -1;
+		}
 		return 0;
 	}
 	return -1;
