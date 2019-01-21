@@ -24,9 +24,6 @@ int  SparseFIRFilter_Init(
 	{
 		return NULL;
 	}
-	//mSparseFIRFilter * handles = (mSparseFIRFilter*)malloc(sizeof(mSparseFIRFilter));
-
-
 	handles->sparsity_ = sparsity;
 	handles->offset_ = offset;
 
