@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)splitting_filter\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)mySplittingFilter\;&amp;(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,18 +152,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cpp_threeband_filter.h" />
     <ClInclude Include="dr_wav.h" />
-    <ClInclude Include="mThreeBandFilter.h" />
-    <ClInclude Include="my_sparse_fir_fliter.h" />
-    <ClInclude Include="splitting_filter\sparse_fir_filter.h" />
-    <ClInclude Include="splitting_filter\three_band_filter_bank.h" />
+    <ClInclude Include="splitting_filter.h" />
     <ClInclude Include="wavfile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ProjectY.cpp" />
-    <ClCompile Include="splitting_filter\sparse_fir_filter.cc" />
-    <ClCompile Include="splitting_filter\three_band_filter_bank.cc" />
+    <ClCompile Include="splitting_filter.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

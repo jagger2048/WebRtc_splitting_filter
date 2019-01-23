@@ -16,42 +16,27 @@
     <Filter Include="wavfile">
       <UniqueIdentifier>{3cf15935-cece-4b76-8064-a7176cfd467e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="C++ version three-band splitting filter">
-      <UniqueIdentifier>{ea339348-2b0a-4e60-83a1-55fb376b7a13}</UniqueIdentifier>
+    <Filter Include="mySplittingFilter">
+      <UniqueIdentifier>{a995ed58-7932-43c2-a70e-fe4aecaaace7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mThreeBandFilter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="my_sparse_fir_fliter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="dr_wav.h">
       <Filter>wavfile</Filter>
     </ClInclude>
     <ClInclude Include="wavfile.h">
       <Filter>wavfile</Filter>
     </ClInclude>
-    <ClInclude Include="splitting_filter\sparse_fir_filter.h">
-      <Filter>C++ version three-band splitting filter</Filter>
-    </ClInclude>
-    <ClInclude Include="splitting_filter\three_band_filter_bank.h">
-      <Filter>C++ version three-band splitting filter</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp_threeband_filter.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="splitting_filter.h">
+      <Filter>mySplittingFilter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ProjectY.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="splitting_filter\sparse_fir_filter.cc">
-      <Filter>C++ version three-band splitting filter</Filter>
-    </ClCompile>
-    <ClCompile Include="splitting_filter\three_band_filter_bank.cc">
-      <Filter>C++ version three-band splitting filter</Filter>
+    <ClCompile Include="splitting_filter.c">
+      <Filter>mySplittingFilter</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
