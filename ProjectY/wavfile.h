@@ -189,42 +189,18 @@ int wavwrite_float(const char* filename, float * const *pDataFloat, size_t nSamp
 	}
 	return 0;
 }
+int wav_destory(wav *handles) {
+	if (handles !=NULL)
+	{
+		free(handles->pDataS16[0]);
+		free(handles->pDataFloat[0]);
+		//if (handles->channels>1)
+		//{
+		//	free(handles->pDataS16[1]);
+		//	free(handles->pDataFloat[1]);
+		//}
+		return 0;
+	}
+	return -1;
+}
 
-// ==============================//
-//static inline float S16ToFloat_(int16_t v) {
-//	static const float kMaxInt16Inverse = 1.f / 32767;
-//	static const float kMinInt16Inverse = 1.f / -32768;
-//	return v * (v > 0 ? kMaxInt16Inverse : -kMinInt16Inverse);
-//}
-//int S16ToFloat(int16_t *pS16Samples, size_t nSamples, float *pFloatSamples) {
-//	if (pFloatSamples == NULL || nSamples < 0 || pS16Samples == NULL)
-//	{
-//		return -1;
-//	}
-//	for (size_t n = 0; n < nSamples; n++)
-//	{
-//		pFloatSamples[n] = S16ToFloat_(pS16Samples[n]);
-//	}
-//	return 0;
-//}
-//
-//static inline int16_t FloatToS16_(float v) {
-//	//S16:      int16_t[-32768, 32767]
-//	if (v > 0)
-//		return v >= 1 ? 32767
-//		: (int16_t)(v * 32767 + 0.5f);
-//	return v <= -1 ? -32768
-//		: (int16_t)(-v * -32768 - 0.5f);
-//}
-//int FloatToS16(float * pFloatSamples, size_t nSamples, int16_t *pS16Samples) {
-//
-//	if (pFloatSamples == NULL || nSamples < 0 || pS16Samples == NULL)
-//	{
-//		return -1;
-//	}
-//	for (size_t n = 0; n < nSamples; n++)
-//	{
-//		pS16Samples[n] = FloatToS16_(pFloatSamples[n]);
-//	}
-//	return 0;
-//}
