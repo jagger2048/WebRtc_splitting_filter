@@ -1,4 +1,4 @@
-#include "my_sparse_fir_fliter.h"
+#include "my_sparse_fir_filter.h"
 
 int SparseFIRFilter_Init(mSparseFIRFilter * handles, const float * nonzero_coeffs, size_t num_nonzero_coeffs, size_t sparsity, size_t offset) {
 
