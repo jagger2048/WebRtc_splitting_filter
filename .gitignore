@@ -263,3 +263,4 @@ __pycache__/
 /testWavRW/DSD2FLAC.pdf
 /testWavRW/sweep-176400hz-0-22050hz-20s-D64-2.8mhz.dsf
 /testWavRW/sine-176400hz-100hz-15s-D64-2.8mhz.dsf
+/测试 wavfile 库的部分就在这个工程中   .txt
