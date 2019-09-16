@@ -11,6 +11,22 @@ More details and usages please find the code in the Visual Studio project. These
 
 ![1548303239389](assets/1548303239389.png)
 
+## update: QMF for two bands case
+
+For the two bands case, 32k sample rate, we test with a 0~20kHz swept-sine signal. Below is the input signal:
+
+![](https://myblog-repo.oss-cn-shenzhen.aliyuncs.com/blog/20190916143608.png)
+
+The output of lower band :
+
+![](https://myblog-repo.oss-cn-shenzhen.aliyuncs.com/blog/20190916143830.png)
+
+And the output of upper band :
+
+![](https://myblog-repo.oss-cn-shenzhen.aliyuncs.com/blog/20190916143925.png)
+
+we can find that the signal of upper band  is flip in frequency domain.
+
 
 
 -----

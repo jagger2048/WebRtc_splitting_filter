@@ -24,11 +24,11 @@
     <ClInclude Include="dr_wav.h">
       <Filter>wavfile</Filter>
     </ClInclude>
-    <ClInclude Include="wavfile.h">
-      <Filter>wavfile</Filter>
-    </ClInclude>
     <ClInclude Include="splitting_filter.h">
       <Filter>mySplittingFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="unittest_helper.h">
+      <Filter>wavfile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
